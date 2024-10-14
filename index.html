@@ -7,16 +7,23 @@
 <body>
 </body>
 <script>
+    let ws;
+    const proto = window.location.protocol === 'https:' ? 'wss' :'ws';
+    ws = new WebSocket(`${proto}://${window.location.host}`);
 
-let ws;
-try {
-  // Choose correct websocket proto
-  const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-  ws = new WebSocket(`${proto}://${window.location.host}`);
-} catch(e) {
-  // 
-}
-ws.onmessage = (event) => {console.log(event.data) }
+    ws.onopen = () => {
+        console.log("WebSocket connection established");
+    };
+
+    ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+    };
+
+    ws.onmessage = (event) => {
+        console.log(event.data);
+    };
+
+
 
 </script>
 
