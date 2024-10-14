@@ -4,7 +4,7 @@ const app = express();
 const PORT = 3000;
 
 app.get('/', function(req, res) {
-  res.sendFile('index.html', {root: __dirname});
+    res.sendFile('index.html', {root: __dirname});
 });
 
 server.on('request', app);
@@ -17,24 +17,22 @@ const WebSocketServer = require('ws').Server;
 const wss = new WebSocketServer({ server: server });
 
 wss.on('connection', function connection(ws) {
-  const numClients = wss.clients.size;
+    const numClients = wss.clients.size;
+    console.log('clients connected: ', numClients);
+    wss.broadcast(`Current visitors: ${numClients}`);
 
-  console.log('clients connected: ', numClients);
-
-  wss.broadcast(`Current visitors: ${numClients}`);
-
-  if (ws.readyState === ws.OPEN) {
+if (ws.readyState === ws.OPEN) {
     ws.send('welcome!');
-  }
+}
 
-  ws.on('close', function close() {
+ws.on('close', function close() {
     wss.broadcast(`Current visitors: ${wss.clients.size}`);
     console.log('A client has disconnected');
-  });
+});
 
-  ws.on('error', function error() {
+ws.on('error', function error() {
     //
-  });
+    });
 });
 
 /**
@@ -43,9 +41,9 @@ wss.on('connection', function connection(ws) {
  * @void
  */
 wss.broadcast = function broadcast(data) {
-  console.log('Broadcasting: ', data);
-  wss.clients.forEach(function each(client) {
+    console.log('Broadcasting: ', data);
+    wss.clients.forEach(function each(client) {
     client.send(data);
-  });
+});
 };
 /** End Websocket **/
